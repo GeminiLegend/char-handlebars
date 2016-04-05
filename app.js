@@ -8,12 +8,21 @@ var methodOverride 	= require('method-override');
 var port 			= process.env.PORT || 5000; 
 
 
-//Middleware
+// Middleware
 // required to use req data with objec syntax
 app.use(bodyParser.json()); 
 app.use(bodyParser.json({ type: 'application/vnd.api+json' })); 
 app.use(bodyParser.urlencoded({ extended: true })); 
-app.use(methodOverride('X-HTTP-Method-Override')); 
+app.use(methodOverride('X-HTTP-Method-Override'));
+
+// required to serve our bundle from browserify
+app.use(express.static('public'));
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 // first argument is the route from where you specified in npm init
 app.route('/')
@@ -21,15 +30,42 @@ app.route('/')
 		res.sendFile(__dirname + '/public/index.html');
 	})
 	.post(function(req, res){
-		var mockData = '';
-		var data = req.body.mockData;
+		Charlatan.setLocale('en-US');
 
-		//eval runs string as js
-		mockData = eval(data);
+		var mockData 	= [];
+		// var iterations 	= req.body.i;
+		var iterations 	= req.body.i;
+		var data 		= req.body.mockData.split("\n");
+
+		
+		//console.log('iterations: ' + iterations);
+
+		// loops over number of people we want
+		for(var i = 0; i < iterations; i++){
+
+			var compiled = {};
+
+			// loops over data properties like name and email
+			for(var j = 0; j < data.length; j++){
+				var propName;
+				if(j == 0) propName = 'name';
+				if(j == 1) propName = 'cell';
+				if(j == 2) propName = 'email';
+				if(j == 3) propName = 'company';
+
+				compiled[propName]  =  eval(data[j]);  //Eval runs string as js
+			}
+
+			// add compiled data to mockData object
+			mockData.push(compiled);
+		}
+
+		console.log(mockData);
+
 		res.send(mockData);
 	});
 
-//http not https
+// http not https
 // alternate syntax w no callback
 var port = 5000;
 app.listen(port);

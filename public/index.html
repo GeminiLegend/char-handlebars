@@ -6,10 +6,22 @@
 </head>
 <body>
  <!-- form action should point to where express server is -->
-	<form action="//localhost:5000" method="POST">
+	<form id='mockForm' action="//localhost:5000" method="POST">
 		<textarea name="mockData"></textarea>
-		<input type="submit">
+		<br><input id="iterations" type="text">
+		<br><input type="submit">
 	</form>
+	
+	<div id="canvas"></div>
+
+	<script id='tpl' type="text/template">
+		<div class="contact">
+			<h1>{{ name }}</h1>
+			<p>{{ email }}</p>
+			<p>{{ cell }}</p>
+			<p>{{ company }}</p>
+		</div>
+	</script>
 
 	<script src="./dist/main.bundle.js"></script>
 </body>
