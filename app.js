@@ -32,13 +32,18 @@ app.route('/')
 	.post(function(req, res){
 		Charlatan.setLocale('en-US');
 
+		function capitalizeFirstLetter(string) {
+			return string.charAt(0).toUpperCase() + string.slice(1);
+		}
+
+		function lowercaseFirstLetter(string) {
+			return string.charAt(0).toLowerCase() + string.slice(1);
+		}
+
 		var mockData 	= [];
 		// var iterations 	= req.body.i;
-		var iterations 	= req.body.i;
-		var data 		= req.body.mockData.split("\n");
-
-		
-		//console.log('iterations: ' + iterations);
+		var iterations 		= req.body.i;
+		var data 			= req.body.mockData.split("\n");
 
 		// overall process:
 		// 1. loop starts with first iteration
@@ -54,28 +59,29 @@ app.route('/')
 
 			// loops over data properties like name and email
 			for(var j = 0; j < data.length; j++){
-				// sets property names for compiled data
-				var propName;
-				/*
-				porperty order
-					Charlatan.Name.name();    
-					Charlatan.PhoneNumber.cellPhone();
-					Charlatan.Internet.email();
-					Charlatan.Company.name(); 
-				*/
-				if(j == 0) propName = 'name';
-				if(j == 1) propName = 'cell';
-				if(j == 2) propName = 'email';
-				if(j == 3) propName = 'company';
 
-				compiled[propName]  =  eval(data[j]);  //Eval runs string as js
+				console.log('item: ' + data[j]);
+
+				var domain 				= data[j].split('.')[1];
+				var domain 				= lowercaseFirstLetter(domain);
+				var name 				= data[j].split('.')[2].split('();')[0];
+				var name 				= capitalizeFirstLetter(name);
+				var key 				= domain + name;
+
+				console.log('domain: ' + domain);
+				console.log('name: ' + name);
+				console.log('key: ' + key);
+
+				compiled[key]  =  eval(data[j]);  //Eval runs string as js
 			}
+
+			console.log(compiled);
 
 			// add compiled data to mockData object
 			mockData.push(compiled);
 		}
 
-		console.log(mockData);
+		// console.log(mockData);
 
 		res.send(mockData);
 	});

@@ -18114,6 +18114,7 @@ var Mock = {
 		})
 		.done( function(res){
 			window.res = res;
+			debugger;
 			Mock.displayData(res);
 		});
 	},
