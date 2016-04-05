@@ -40,14 +40,29 @@ app.route('/')
 		
 		//console.log('iterations: ' + iterations);
 
-		// loops over number of people we want
+		// overall process:
+		// 1. loop starts with first iteration
+		// 2. creates compiled object
+		// 3. begins looping over the data (number of calls to charlatan)
+		//		and sets a porperty name for each one
+		// 4. adds that property to the compiled obj and sets the value to
+		//		the evaluated string at the matching index
+		// loops over number of people we want, nested loop
 		for(var i = 0; i < iterations; i++){
 
 			var compiled = {};
 
 			// loops over data properties like name and email
 			for(var j = 0; j < data.length; j++){
+				// sets property names for compiled data
 				var propName;
+				/*
+				porperty order
+					Charlatan.Name.name();    
+					Charlatan.PhoneNumber.cellPhone();
+					Charlatan.Internet.email();
+					Charlatan.Company.name(); 
+				*/
 				if(j == 0) propName = 'name';
 				if(j == 1) propName = 'cell';
 				if(j == 2) propName = 'email';

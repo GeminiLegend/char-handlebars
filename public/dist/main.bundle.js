@@ -18079,6 +18079,7 @@ define(function (require, exports, module) {
 },{"amdefine":1}],47:[function(require,module,exports){
 
 window.$ 			= require('jquery');
+// reuire handle bars here because browserify duh.
 window.Handlebars 	= require('handlebars');
 
 //require mock module globally for use
@@ -18119,17 +18120,21 @@ var Mock = {
 
 	displayData: function(mockData){
 		$('form').hide();
+		// catche the html handlebars will need to compile
 		var tpl 		= $('#tpl').html();
 		var contacts 	= [];
 
 		for(var i = 0; i < mockData.length; i++){
+			// mockData is array with compiled charlatan identities
 			var ident 		= mockData[i];
+			// compile the template to display the identity
 			var compiled 	= Handlebars.compile(tpl);
+			// cache the compiled identity
 			var html 		= compiled(ident);
-
+			// puch the identity to an array
 			contacts.push(html);
 		}
-
+		// set the html to the finished product of the loop
 		$('#canvas').html(contacts);
 	}
 };
